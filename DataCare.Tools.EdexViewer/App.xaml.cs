@@ -13,5 +13,6 @@ namespace DataCare.Tools.EdexViewer
     /// </summary>
     public partial class App : Application
     {
+
     }
 }

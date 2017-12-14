@@ -4,9 +4,128 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DataCare.Tools.EdexViewer"
+        xmlns:vm ="clr-namespace:DataCare.Tools.EdexViewer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
+        Title="MainWindow" Height="auto" Width="970" 
+        ResizeMode="NoResize">
+    <Window.DataContext>
+        <vm:ImportViewModel/>
+    </Window.DataContext>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="50" />
+            <ColumnDefinition Width="auto" MinWidth="840" />
+            <ColumnDefinition Width="0"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" FontWeight="Bold" FontSize="15" Height="20" Margin="0,6,0,5" >EDEX data</TextBlock>
+
+        <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" FontWeight="Bold" FontSize="12" Height="16" Margin="0,0,0,29" Grid.RowSpan="2">Bestandslocatie...</TextBlock>
+        <TextBox Grid.Row="2" x:Name="EdexFile" Grid.Column="1" VerticalAlignment="center" Text="{Binding FileOrPathName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Button Grid.Row="2" Grid.Column="1" FontWeight="Bold" VerticalAlignment="Center" Click="Button_Click" Width="40" HorizontalAlignment="Right">...</Button>
+
+        <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" FontWeight="Bold" FontSize="12" Margin="0, 10, 0, 0">Schoolgegevens</TextBlock>
+        <StackPanel Grid.Row="4" Grid.Column="1">
+            <DockPanel>
+                <TextBlock Width="120" FontWeight="Bold" Text="Schooljaar: " DockPanel.Dock="Left" />
+                <TextBlock Text="{Binding EdexAdministratie.School.Schooljaar}"></TextBlock>
+            </DockPanel>
+            <DockPanel>
+                <TextBlock Width="120" FontWeight="Bold" Text="Brincode: " DockPanel.Dock="Left" />
+                <TextBlock Grid.Row="0" Text="{Binding EdexAdministratie.School.Brincode}"></TextBlock>
+            </DockPanel>
+            <DockPanel>
+                <TextBlock Width="120" FontWeight="Bold" Text="Dependancecode: " DockPanel.Dock="Left" />
+                <TextBlock Grid.Row="0" Text="{Binding EdexAdministratie.School.Dependancecode}"></TextBlock>
+            </DockPanel>
+            <DockPanel>
+                <TextBlock Width="120" FontWeight="Bold" Text="Schoolkey: " DockPanel.Dock="Left" />
+                <TextBlock Grid.Row="0" Text="{Binding EdexAdministratie.School.Schoolkey}"></TextBlock>
+            </DockPanel>
+            <DockPanel>
+                <TextBlock Width="120" FontWeight="Bold" Text="Versie: " DockPanel.Dock="Left" />
+                <TextBlock Grid.Row="0" Text="{Binding EdexAdministratie.School.Versie}"></TextBlock>
+            </DockPanel>
+        </StackPanel>
+
+        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" FontWeight="Bold" FontSize="12"  Margin="0, 10, 0 ,0">Leerlingen</TextBlock>
+        <Expander Grid.Row="6" Grid.Column="1">
+            <DataGrid Grid.Row="6" Grid.Column="1" AutoGenerateColumns="False" ItemsSource="{Binding EdexLeerlingenLijst, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="100" IsReadOnly="true">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Naam" Binding="{Binding Naam}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Voorletters" Binding="{Binding Voorletters}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Roepnaam" Binding="{Binding Roepnaam}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Voorvoegsel" Binding="{Binding Voorvoegsel}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Achternaam" Binding="{Binding Achternaam}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Geboortedatum" Binding="{Binding Geboortedatum}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Instroomdatum" Binding="{Binding Instroomdatum}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Uitstroomdatum" Binding="{Binding Uitstroomdatum}"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Expander>
+
+        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" FontWeight="Bold" FontSize="12" Margin="0, 10, 0, 0">Vestigingen</TextBlock>
+        <Expander Grid.Row="8" Grid.Column="1">
+            <ScrollViewer Grid.Row="8" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden" Margin="0, 15">
+                <ItemsControl ItemsSource="{Binding Vestigingen}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Expander>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Naam}" Margin="0, 5"></TextBlock>
+                                    <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Groepen}" Margin="0, 5" IsReadOnly="True" Height="auto">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Key" Binding="{Binding Key}" Width="125"></DataGridTextColumn>
+                                            <DataGridTextColumn Header="Naam" Binding="{Binding Naam}" Width="75"></DataGridTextColumn>
+                                            <DataGridTemplateColumn Header="Leerlingen" Width="275">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <ItemsControl ItemsSource="{Binding Leerlingen}">
+                                                            <ItemsControl.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <TextBlock Text="{Binding Naam}" />
+                                                                </DataTemplate>
+                                                            </ItemsControl.ItemTemplate>
+                                                        </ItemsControl>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+                                            <DataGridTemplateColumn Header="Leerkrachten" Width="275">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <ItemsControl ItemsSource="{Binding Leerkrachten}">
+                                                            <ItemsControl.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <TextBlock Text="{Binding naam, StringFormat='- {0}'}"></TextBlock>
+                                                                </DataTemplate>
+                                                            </ItemsControl.ItemTemplate>
+                                                        </ItemsControl>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </StackPanel>
+                            </Expander>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Expander>
     </Grid>
 </Window>
