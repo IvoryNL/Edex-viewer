@@ -23,6 +23,8 @@ namespace DataCare.Tools.EdexViewer
         public ObservableCollection<Vestiging> Vestigingen { get; set; }
 
         public ObservableCollection<EdexLeerling> EdexLeerlingenLijst { get; set; }
+
+        public bool Visible { get; set; }
         
         public string PathOfFile;
         public string FileOrPathName
@@ -44,6 +46,7 @@ namespace DataCare.Tools.EdexViewer
         {
             Vestigingen = new ObservableCollection<Vestiging>();
             EdexLeerlingenLijst = new ObservableCollection<EdexLeerling>();
+            Visible = false;
         }
 
         public void importFile()
@@ -51,6 +54,7 @@ namespace DataCare.Tools.EdexViewer
             XmlTextReader reader = new XmlTextReader(PathOfFile);
             XDocument xDoc = XDocument.Load(reader);
             EdexAdministratie = EdexmlParser.ParseEdexfile(xDoc);
+            if (EdexAdministratie != null) Visible = true;
             var groepenMetVestiging = EdexAdministratie.GetGroepenWithVestiging();
             
             foreach (var groepMetVestiging in groepenMetVestiging)
@@ -82,6 +86,7 @@ namespace DataCare.Tools.EdexViewer
 
             NotifyPropertyChanged("EdexAdministratie");
             NotifyPropertyChanged("Vestigingen");
+            NotifyPropertyChanged("Visible");
         }
 
         private void AddVestiging(Vestiging edexVestiging)

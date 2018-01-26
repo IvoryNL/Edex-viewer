@@ -6,8 +6,11 @@
         xmlns:local="clr-namespace:DataCare.Tools.EdexViewer"
         xmlns:vm ="clr-namespace:DataCare.Tools.EdexViewer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="auto" Width="970" 
+        Title="MainWindow" Height="auto" Width="1050" 
         ResizeMode="NoResize">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+    </Window.Resources>
     <Window.DataContext>
         <vm:ImportViewModel/>
     </Window.DataContext>
@@ -63,9 +66,9 @@
             </DockPanel>
         </StackPanel>
 
-        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" FontWeight="Bold" FontSize="12"  Margin="0, 10, 0 ,0">Leerlingen</TextBlock>
-        <Expander Grid.Row="6" Grid.Column="1">
-            <DataGrid Grid.Row="6" Grid.Column="1" AutoGenerateColumns="False" ItemsSource="{Binding EdexLeerlingenLijst, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="100" IsReadOnly="true">
+        <!--<TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" FontWeight="Bold" FontSize="12"  Margin="0, 10, 0 ,0">Leerlingen</TextBlock>-->
+        <Expander Grid.Row="6" Grid.Column="1" FontWeight="Bold" Header="Leerlingen" IsExpanded="false" Margin="0,15,0,0" Visibility="{Binding Visible, Converter={StaticResource BoolToVisConverter}}">
+            <DataGrid Grid.Row="6" Grid.Column="1" FontWeight="Normal" AutoGenerateColumns="False" ItemsSource="{Binding EdexLeerlingenLijst, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="100" IsReadOnly="true">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Naam" Binding="{Binding Naam}"></DataGridTextColumn>
                     <DataGridTextColumn Header="Voorletters" Binding="{Binding Voorletters}"></DataGridTextColumn>
@@ -79,8 +82,8 @@
             </DataGrid>
         </Expander>
 
-        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" FontWeight="Bold" FontSize="12" Margin="0, 10, 0, 0">Vestigingen</TextBlock>
-        <Expander Grid.Row="8" Grid.Column="1">
+        <!--<TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" FontWeight="Bold" FontSize="12" Margin="0, 10, 0, 0">Vestigingen</TextBlock>-->
+        <Expander Grid.Row="8" Grid.Column="1" FontWeight="Bold" Header="Vestigingen" IsExpanded="false" Margin="0,15,0,0" Visibility="{Binding Visible, Converter={StaticResource BoolToVisConverter}}">
             <ScrollViewer Grid.Row="8" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden" Margin="0, 15">
                 <ItemsControl ItemsSource="{Binding Vestigingen}">
                     <ItemsControl.ItemTemplate>
@@ -88,7 +91,7 @@
                             <Expander>
                                 <StackPanel>
                                     <TextBlock Text="{Binding Naam}" Margin="0, 5"></TextBlock>
-                                    <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Groepen}" Margin="0, 5" IsReadOnly="True" Height="auto">
+                                    <DataGrid AutoGenerateColumns="False" FontWeight="Normal" ItemsSource="{Binding Groepen}" Margin="0, 5" IsReadOnly="True" Height="auto">
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Header="Key" Binding="{Binding Key}" Width="125"></DataGridTextColumn>
                                             <DataGridTextColumn Header="Naam" Binding="{Binding Naam}" Width="75"></DataGridTextColumn>
